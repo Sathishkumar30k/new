@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.jarvis.newbegining.CustomView
+        android:id="@+id/customView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:label_start="$10"
+        app:label_end="$500"
+        app:label_center="$400.00"
+        app:label_center_desc="Left to spend"
+        app:progress="50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wish_textView" />
+
+    <TextView
+        android:id="@+id/wish_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Bazinga !!"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sign_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Done"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/result_textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="one"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/result_textView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/result_textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="two"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/result_textView1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/roll_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Roll"
+        style="@style/custom_fix"
+        android:gravity="center"
+        android:background="@color/purple_200"
+        app:layout_constraintEnd_toEndOf="@id/result_textView1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/result_textView1" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/roll_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Roll"
+        android:padding="16dp"
+        style="@style/custom_fix"
+        android:gravity="center"
+        android:background="@color/purple_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/result_textView2"
+        app:layout_constraintTop_toBottomOf="@+id/result_textView1" />
+    <com.jarvis.newbegining.CustomView
+        android:id="@+id/customView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:progress="70"
+        app:progressColor="@color/purple_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roll_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
