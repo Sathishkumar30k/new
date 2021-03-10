@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.setPadding
+import androidx.core.view.updatePadding
+import androidx.core.view.updatePaddingRelative
 import com.google.android.material.button.MaterialButton
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +39,12 @@ class MainActivity : AppCompatActivity() {
         p.setMargins(marginInDP.toInt(),0,marginInDP.toInt(),0)
         rollButton.requestLayout()*/
         val scale:  Float= resources.displayMetrics.density
-        var marginInDP = (16.0f*scale+0.5f).toInt()
-        rollButton.setPadding(marginInDP)
+        var marginInDP = (16*scale+0.5f)
+        //rollButton.setPadding(marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt())
+        //rollButton.updatePadding(marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt())
+                //rollButton.updatePadding(16,16,16,16)
+        //rollButton.updatePaddingRelative(marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt())
+        rollButton.setPadding((Math.ceil((16*resources.displayMetrics.density).toDouble())).toInt())
         //rollButton.requestLayout()
     }
 

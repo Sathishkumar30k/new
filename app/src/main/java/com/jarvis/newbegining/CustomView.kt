@@ -3,10 +3,12 @@ package com.jarvis.newbegining
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import androidx.core.content.ContextCompat
 import kotlin.math.min
 
 class CustomView @JvmOverloads constructor(
@@ -30,6 +32,8 @@ class CustomView @JvmOverloads constructor(
     private var progressSweep :Float = 0f
     private var progressColor :Int
     private var progressTrackColor :Int
+
+    private var mThumb :Drawable?
 
 
 
@@ -63,7 +67,10 @@ class CustomView @JvmOverloads constructor(
         progress = a.getInt(R.styleable.CustomProgressView_progress,0)
         progressColor = a.getColor(R.styleable.CustomProgressView_progressColor,Color.parseColor("#002D72"))
         progressTrackColor = a.getColor(R.styleable.CustomProgressView_progressTrackColor,Color.parseColor("#F1F1F1"))
-
+        mThumb = ContextCompat.getDrawable(context,R.drawable.ic_trial)
+        var thumbHalfH =mThumb?.intrinsicHeight
+        var thumbHalfW =mThumb?.intrinsicHeight
+        mThumb?.setBounds(-thumbHalfW!!,-thumbHalfH!!,thumbHalfW,thumbHalfH)
 
         mRect =RectF()
         mArcRect =RectF()
@@ -227,6 +234,7 @@ class CustomView @JvmOverloads constructor(
 
         //canvas?.drawArc(mArcRect,180f,180f,false,mArcPaintTrack)
         //canvas?.drawArc(mArcRect,180f,135f,false,mArcPaint)
+        mThumb?.setBounds(-(viewWidth*0.045).toInt(),-(viewWidth*0.045).toInt(),(viewWidth*0.045).toInt(),(viewWidth*0.045).toInt())
 
         canvas?.drawArc(mArcFullRect,180f,180f,false,mArcPaintTrack)
         canvas?.drawArc(mArcFullRect,180f,progressSweep,false,mArcPaint)
@@ -234,6 +242,13 @@ class CustomView @JvmOverloads constructor(
         canvas?.drawText(labelEnd,viewWidth-fullRectOffset, viewWidth/2+5*fullRectOffset/4,textPaintGauge)
         canvas?.drawText(labelCenter,viewWidth/2f, viewWidth/2f - fullRectOffset,textPaintCenter)
         canvas?.drawText(labelCenterDesc,viewWidth/2f, viewWidth/2f +fullRectOffset/2f ,textPaintCenterDesc)
+        var radius = (viewWidth-2*fullRectOffset)/2
+        var thumbx = (radius * Math.cos(Math.toRadians(progressSweep.toDouble())))
+        var thumby = (radius * Math.sin(Math.toRadians(progressSweep.toDouble())))
+        canvas?.save()
+        canvas?.translate(viewWidth/2 - thumbx.toFloat(), viewWidth/2 - thumby.toFloat())
+        mThumb?.draw(canvas!!)
+        canvas?.restore()
 
 
     }
