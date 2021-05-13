@@ -17,6 +17,13 @@
         <attr name="progress" format="integer"/>
         <attr name="progressColor" format="color"/>
         <attr name="progressTrackColor" format="color"/>
+        <attr name="progressArcThickness" format="dimension"/>
+        <attr name="progressTrackThickness" format="dimension"/>
+        <attr name="label_start_textSize" format="dimension"/>
+        <attr name="label_end_textSize" format="dimension"/>
+        <attr name="label_center_textSize" format="dimension"/>
+        <attr name="label_center_desc_textSize" format="dimension"/>
+        <attr name="progressThumbSize" format="dimension"/>
     </declare-styleable>
 
 </resources>

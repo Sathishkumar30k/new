@@ -1,54 +1,151 @@
 package com.jarvis.newbegining
 
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setPadding
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.ChipGroup
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val customView : CustomView = findViewById(R.id.customView2)
+        val customView : CustomView = findViewById(R.id.customView)
 
         //val rollButton : Button = findViewById(R.id.roll_button)
         val rollButton : MaterialButton = findViewById(R.id.roll_button)
+//        val myText : TextView = findViewById(R.id.sign_textView)
+        /*val cg : ChipGroup = findViewById(R.id.chip_group)
+        val hs : HorizontalScrollView = findViewById(R.id.h_scroll)*/
+        val progressControll :SeekBar = findViewById(R.id.progress_controll)
+        val trackThicknessControll :SeekBar = findViewById(R.id.track_controll)
+        val progressThicknessControll :SeekBar = findViewById(R.id.progres_thick_controll)
+        val thumbControll :SeekBar = findViewById(R.id.thumb_controll)
+
 
         //rollButton.setFlex()
         rollButton.setOnClickListener{
-            rollDice()
-            customView.swapColor()
+           // rollDice()
+            //customView.swapColor()
+            customView.setLabelCenter("$"+80+".00")
+            //customView.progressAnimation(80,800).start()
+            val myanim = customView.progressAnimation(80,800)
+            myanim.setDuration(1000)
+            myanim.start()
+            /*val anim = ObjectAnimator.ofInt(customView, "progress", 80)
+            anim.setDuration(800)
+            anim.interpolator = AccelerateDecelerateInterpolator()
+            anim.start()*/
+
+
         }
-        customView.setLabelStart("$20")
+        customView.setLabelStart("$0")
+        customView.setLabelEnd("$100")
+        progressControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                customView.setProgress(progress)
+                customView.setLabelCenter("$"+progress+".00")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+
+        progressThicknessControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                customView.setProgressArcThickness(progress.toFloat())
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+
+        trackThicknessControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                customView.setProgressTrackThickness(progress.toFloat())
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+
+        thumbControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                customView.setThumbSize  (progress.toFloat())
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+        /*customView.setLabelStart("$20")
         customView.setLabelEnd("$200")
         customView.setLabelCenter("$250")
         customView.setLabelCenterDesc("Hello!")
         customView.setProgress(30)
-        customView.setProgressColor(Color.YELLOW)
+        customView.setProgressColor(Color.YELLOW)*/
         /*var p :ViewGroup.MarginLayoutParams = rollButton.layoutParams as ViewGroup.MarginLayoutParams
         var marginInDP = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,64F,resources.displayMetrics)
         p.setMargins(marginInDP.toInt(),0,marginInDP.toInt(),0)
         rollButton.requestLayout()*/
         val scale:  Float= resources.displayMetrics.density
-        var marginInDP = (16*scale+0.5f)
+        var marginInDP = (50*scale+0.5f).toInt()
         //rollButton.setPadding(marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt())
         //rollButton.updatePadding(marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt())
                 //rollButton.updatePadding(16,16,16,16)
         //rollButton.updatePaddingRelative(marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt(),marginInDP.toInt())
-        rollButton.setPadding((Math.ceil((16*resources.displayMetrics.density).toDouble())).toInt())
+        //rollButton.setPadding((Math.ceil((16*resources.displayMetrics.density).toDouble())).toInt())
         //rollButton.requestLayout()
+        //myText.setPadding(marginInDP,marginInDP,marginInDP,marginInDP)
+        //rollButton.setPadding(marginInDP,marginInDP,marginInDP,marginInDP)
+        //rollButton.requestLayout()
+
+       /* cg.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 0.0f }
+        hs.updateLayoutParams<ConstraintLayout.LayoutParams> { horizontalBias = 1.0f }*/
+
+
+
+
     }
 
-    private fun rollDice() {
+    /*private fun rollDice() {
        val firstDice = Dice(6)
        val secondDice = Dice(6)
         val firstDiceRoll = firstDice.roll()
@@ -57,5 +154,5 @@ class MainActivity : AppCompatActivity() {
         val result2 :TextView = findViewById(R.id.result_textView2)
         result1.text = firstDiceRoll.toString()
         result2.text = secondDiceRoll.toString()
-    }
+    }*/
 }

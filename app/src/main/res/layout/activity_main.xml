@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".MainActivity">
 
     <com.jarvis.newbegining.CustomView
         android:id="@+id/customView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:label_start="$10"
-        app:label_end="$500"
-        app:label_center="$400.00"
+        android:layout_margin="8dp"
+        app:label_start="$0"
+        app:label_end="$100"
+        app:label_center="$0.00"
         app:label_center_desc="Left to spend"
-        app:progress="50"
+        app:progress="20"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wish_textView" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/wish_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,12 +37,16 @@
         android:id="@+id/sign_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="Done"
         android:textSize="20sp"
+        android:background="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customView2"
+        app:layout_constraintVertical_bias="0.49" />
 
     <TextView
         android:id="@+id/result_textView1"
@@ -74,7 +79,6 @@
         android:text="Roll"
         style="@style/custom_fix"
         android:gravity="center"
-        android:background="@color/purple_200"
         app:layout_constraintEnd_toEndOf="@id/result_textView1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/result_textView1" />
@@ -84,22 +88,70 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Roll"
-        android:padding="16dp"
         style="@style/custom_fix"
         android:gravity="center"
-        android:background="@color/purple_200"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/result_textView2"
-        app:layout_constraintTop_toBottomOf="@+id/result_textView1" />
-    <com.jarvis.newbegining.CustomView
-        android:id="@+id/customView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:progress="70"
-        app:progressColor="@color/purple_500"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roll_button" />
+        app:layout_constraintTop_toBottomOf="@+id/result_textView1" />-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/roll_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Animate"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Progress Controll"
+                android:textSize="18sp"/>
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/progress_controll"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Track thickness Controll"
+                android:textSize="18sp"/>
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/track_controll"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Progres thickness Controll"
+                android:textSize="18sp"/>
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/progres_thick_controll"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thumb size Controll"
+                android:textSize="18sp"/>
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/thumb_controll"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
