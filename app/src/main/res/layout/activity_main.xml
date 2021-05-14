@@ -17,10 +17,9 @@
         app:label_end="$100"
         app:label_center="$0.00"
         app:label_center_desc="Left to spend"
-        app:label_start_textSize="20dp"
-        app:label_center_textSize="30dp"
         app:progress="20"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="center"
         app:layout_constraintStart_toStartOf="parent"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -54,6 +53,18 @@
                         android:layout_height="wrap_content"
                         android:text="Animate"
                         android:gravity="center"/>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gauge View Size Controll"
+                        android:textSize="18sp"/>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/gaugeView_controll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="120"
+                        android:valueTo="380"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -182,7 +193,6 @@
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
                     </com.google.android.material.button.MaterialButtonToggleGroup>
-
 
                 </LinearLayout>
             </ScrollView>

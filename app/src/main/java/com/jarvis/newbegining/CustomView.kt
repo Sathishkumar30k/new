@@ -268,8 +268,13 @@ class CustomView @JvmOverloads constructor(
                     measureDimension(desiredHeight.toInt(),heightMeasureSpec))
         }
 
-//        progressArcThickness = width*0.05f
-//        progressTrackThickness = width*0.05f
+        progressArcThickness = measureDimension(desiredWidth,widthMeasureSpec)*0.05f
+        progressTrackThickness =measureDimension(desiredWidth,widthMeasureSpec)*0.05f
+        progressThumbSize =  measureDimension(desiredWidth,widthMeasureSpec)*0.045f
+        labelStartTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*0.065f).toInt()
+        labelEndTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*0.065f).toInt()
+        labelCenterTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*0.15f).toInt()
+        labelCenterDescTextSize= (measureDimension(desiredWidth,widthMeasureSpec)*0.08f).toInt()
 
     }
     fun swapColor(){

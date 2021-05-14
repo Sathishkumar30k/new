@@ -20,6 +20,7 @@ import androidx.core.view.updatePaddingRelative
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.slider.Slider
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         val trackThicknessControll :SeekBar = findViewById(R.id.track_controll)
         val progressThicknessControll :SeekBar = findViewById(R.id.progres_thick_controll)
         val thumbControll :SeekBar = findViewById(R.id.thumb_controll)
+        val gaugeSizeControll : Slider = findViewById(R.id.gaugeView_controll)
         val thumbSwitch :Switch = findViewById(R.id.thumb_switch)
         thumbSwitch.isChecked = true
         val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.toggleButton)
@@ -155,6 +157,10 @@ class MainActivity : AppCompatActivity() {
                     customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_90))
                 }
             }
+        }
+
+        gaugeSizeControll.addOnChangeListener { slider, value, fromUser ->
+            customView.updateLayoutParams<LinearLayout.LayoutParams> {width =  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,resources.displayMetrics).toInt() }
         }
 
 
