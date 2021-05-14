@@ -1,4 +1,4 @@
-package com.jarvis.newbegining
+ package com.jarvis.newbegining
 
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
@@ -26,6 +26,14 @@ class CustomView @JvmOverloads constructor(
     private val CENTER_VALUE_TEXT_SIZE :Float = GUAGE_TEXT_SIZE.times(5)
     private val CENTER_DESCRIPTION_TEXT_SIZE :Float = GUAGE_TEXT_SIZE.times(2)
     private val FULL_RECT_OFFSSET_MULTIPLIER :Float = 0.1f
+    private var progressArcThicknessRatio = 0.05f
+    private var progressTrackThicknessRatio = 0.05f
+    private var progressThumbSizeRatio =  0.045f
+    private var labelStartTextSizeRatio = 0.065f
+    private var labelEndTextSizeRatio = 0.065f
+    private var labelCenterTextSizeRatio = 0.15f
+    private var labelCenterDescTextSizeRatio= 0.08f
+
 
     private var labelStart :String
     private var labelEnd :String
@@ -268,13 +276,13 @@ class CustomView @JvmOverloads constructor(
                     measureDimension(desiredHeight.toInt(),heightMeasureSpec))
         }
 
-        progressArcThickness = measureDimension(desiredWidth,widthMeasureSpec)*0.05f
-        progressTrackThickness =measureDimension(desiredWidth,widthMeasureSpec)*0.05f
-        progressThumbSize =  measureDimension(desiredWidth,widthMeasureSpec)*0.045f
-        labelStartTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*0.065f).toInt()
-        labelEndTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*0.065f).toInt()
-        labelCenterTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*0.15f).toInt()
-        labelCenterDescTextSize= (measureDimension(desiredWidth,widthMeasureSpec)*0.08f).toInt()
+        progressArcThickness = measureDimension(desiredWidth,widthMeasureSpec)*progressArcThicknessRatio
+        progressTrackThickness =measureDimension(desiredWidth,widthMeasureSpec)*progressTrackThicknessRatio
+        progressThumbSize =  measureDimension(desiredWidth,widthMeasureSpec)*progressThumbSizeRatio
+        labelStartTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*labelStartTextSizeRatio).toInt()
+        labelEndTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*labelEndTextSizeRatio).toInt()
+        labelCenterTextSize = (measureDimension(desiredWidth,widthMeasureSpec)*labelCenterTextSizeRatio).toInt()
+        labelCenterDescTextSize= (measureDimension(desiredWidth,widthMeasureSpec)*labelCenterDescTextSizeRatio).toInt()
 
     }
     fun swapColor(){
@@ -300,10 +308,10 @@ class CustomView @JvmOverloads constructor(
        // mArcPaint.strokeWidth=  viewWidth*0.05f
 
         mArcPaint.strokeWidth= progressArcThickness
-
+        progressArcThicknessRatio= progressArcThickness/viewWidth
         //mArcPaintTrack.strokeWidth = viewWidth*0.05f
-
         mArcPaintTrack.strokeWidth = progressTrackThickness
+        progressTrackThicknessRatio = progressTrackThickness/viewWidth
         //textPaintGauge.textSize = viewWidth*0.065f
         starttextPaintGauge.textSize = labelStartTextSize.toFloat()
         endtextPaintGauge.textSize = labelEndTextSize.toFloat()
@@ -323,7 +331,7 @@ class CustomView @JvmOverloads constructor(
         //canvas?.drawArc(mArcRect,180f,180f,false,mArcPaintTrack)
         //canvas?.drawArc(mArcRect,180f,135f,false,mArcPaint)
         mThumb?.setBounds(-progressThumbSize.toInt(),-progressThumbSize.toInt(),progressThumbSize.toInt(),progressThumbSize.toInt())
-
+        progressThumbSizeRatio = progressThumbSize/viewWidth
         canvas?.drawArc(mArcFullRect,180f,180f,false,mArcPaintTrack)
         canvas?.drawArc(mArcFullRect,180f,progressSweep,false,mArcPaint)
         canvas?.drawText(labelStart,0+fullRectOffset, viewWidth/2+fullRectOffset,starttextPaintGauge)
