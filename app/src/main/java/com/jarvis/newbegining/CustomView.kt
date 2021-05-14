@@ -38,8 +38,12 @@ class CustomView @JvmOverloads constructor(
     private var progressArcThickness :Float
     private var progressTrackThickness :Float
     private var progressThumbSize :Float
-
-    private var mThumb :Drawable?
+    private var labelStartTextSize :Int
+    private var labelEndTextSize :Int
+    private var labelCenterTextSize :Int
+    private var labelCenterDescTextSize :Int
+    private var isThumbVisible :Boolean
+        private var mThumb :Drawable?
 
     private var mRect :RectF
     private var mArcRect :RectF
@@ -51,7 +55,8 @@ class CustomView @JvmOverloads constructor(
     private var mArcPaintTrack :Paint
     private var mArcPaintBG :Paint
     private var mArcFullRectPaint :Paint
-    private var textPaintGauge :Paint
+    private var starttextPaintGauge :Paint
+    private var endtextPaintGauge :Paint
     private var textPaintCenter :Paint
     private var textPaintCenterDesc :Paint
     private var viewWidth: Int =120
@@ -71,9 +76,12 @@ class CustomView @JvmOverloads constructor(
         progressArcThickness = a.getDimension(R.styleable.CustomProgressView_progressArcThickness,60F)
         progressTrackThickness = a.getDimension(R.styleable.CustomProgressView_progressTrackThickness,60F)
         progressThumbSize= a.getDimension(R.styleable.CustomProgressView_progressThumbSize,50F)
-
-
-        mThumb = ContextCompat.getDrawable(context,R.drawable.ic_trial)
+        labelStartTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_start_textSize,70)
+        labelEndTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_end_textSize,70)
+        labelCenterTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_center_textSize,180)
+        labelCenterDescTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_center_desc_textSize,98)
+        isThumbVisible = a.getBoolean(R.styleable.CustomProgressView_isThumbVisible,true)
+        mThumb = a.getDrawable(R.styleable.CustomProgressView_progressThumbDrawable)?:ContextCompat.getDrawable(context,R.drawable.ic_run_circle)
         var thumbHalfH =mThumb?.intrinsicHeight
         var thumbHalfW =mThumb?.intrinsicHeight
         mThumb?.setBounds(-thumbHalfW!!,-thumbHalfH!!,thumbHalfW,thumbHalfH)
@@ -110,23 +118,29 @@ class CustomView @JvmOverloads constructor(
 
         mArcFullRectPaint.color = Color.YELLOW
 
-        textPaintGauge = Paint().apply {
+        starttextPaintGauge = Paint().apply {
             isAntiAlias =true
             textAlign = Paint.Align.CENTER
             color = Color.parseColor("#666666")
-            textSize = GUAGE_TEXT_SIZE
+            textSize = labelStartTextSize.toFloat()
+        }
+        endtextPaintGauge = Paint().apply {
+            isAntiAlias =true
+            textAlign = Paint.Align.CENTER
+            color = Color.parseColor("#666666")
+            textSize = labelStartTextSize.toFloat()
         }
         textPaintCenterDesc = Paint().apply {
             isAntiAlias =true
             textAlign = Paint.Align.CENTER
             color = Color.parseColor("#666666")
-            textSize = CENTER_DESCRIPTION_TEXT_SIZE
+            textSize = labelCenterTextSize.toFloat()
         }
         textPaintCenter = Paint().apply {
             isAntiAlias =true
             textAlign = Paint.Align.CENTER
             color = Color.BLACK
-            textSize = CENTER_VALUE_TEXT_SIZE
+            textSize = labelCenterTextSize.toFloat()
         }
 
        /* setLabelStart(labelStart)
@@ -185,6 +199,32 @@ class CustomView @JvmOverloads constructor(
         postInvalidate()
     }
 
+    fun setLabelStartTextSize(value: Int){
+        labelStartTextSize= value
+        postInvalidate()
+    }
+    fun setLabelEndTextSize(value: Int){
+        labelEndTextSize= value
+        postInvalidate()
+    }
+    fun setLabelCenterTextSize(value: Int){
+        labelCenterTextSize= value
+        postInvalidate()
+    }
+
+    fun isThumbVisible(value: Boolean){
+        isThumbVisible= value
+        postInvalidate()
+    }
+
+    fun setProgressThumbDrawable(value: Drawable){
+        mThumb= value
+        postInvalidate()
+    }
+
+
+
+
     fun convertPercentageToSweepAngle(value: Int): Float{
         var result :Float
         if(value>100){ result= 180f}
@@ -231,7 +271,6 @@ class CustomView @JvmOverloads constructor(
 //        progressArcThickness = width*0.05f
 //        progressTrackThickness = width*0.05f
 
-
     }
     fun swapColor(){
         mArcPaint.color =  Color.RED
@@ -254,15 +293,18 @@ class CustomView @JvmOverloads constructor(
         //var fullViewRect = RectF()
 
        // mArcPaint.strokeWidth=  viewWidth*0.05f
-//        progressArcThickness = viewWidth*0.05f
+
         mArcPaint.strokeWidth= progressArcThickness
 
         //mArcPaintTrack.strokeWidth = viewWidth*0.05f
-//        progressTrackThickness= viewWidth*0.05f
+
         mArcPaintTrack.strokeWidth = progressTrackThickness
-        textPaintGauge.textSize = viewWidth*0.065f
-        textPaintCenterDesc.textSize = viewWidth*0.08f
-        textPaintCenter.textSize = viewWidth*0.15f
+        //textPaintGauge.textSize = viewWidth*0.065f
+        starttextPaintGauge.textSize = labelStartTextSize.toFloat()
+        endtextPaintGauge.textSize = labelEndTextSize.toFloat()
+        //textPaintCenterDesc.textSize = viewWidth*0.08f
+        textPaintCenterDesc.textSize = labelCenterDescTextSize.toFloat()
+        textPaintCenter.textSize = labelCenterTextSize.toFloat()
         //fullViewRect.set(0f,0f,viewWidth.toFloat(),viewHeight.toFloat())
         //mArcRect.set(viewWidth/2 - SQUARE_SIZE/2,(viewHeight/2).toFloat() ,(viewWidth/2 +SQUARE_SIZE/2).toFloat(),(viewHeight/2 +SQUARE_SIZE ).toFloat())
         //canvas?.drawRect(mRect,mPaint)
@@ -279,21 +321,24 @@ class CustomView @JvmOverloads constructor(
 
         canvas?.drawArc(mArcFullRect,180f,180f,false,mArcPaintTrack)
         canvas?.drawArc(mArcFullRect,180f,progressSweep,false,mArcPaint)
-        canvas?.drawText(labelStart,0+fullRectOffset, viewWidth/2+fullRectOffset,textPaintGauge)
-        canvas?.drawText(labelEnd,viewWidth-fullRectOffset, viewWidth/2+fullRectOffset,textPaintGauge)
+        canvas?.drawText(labelStart,0+fullRectOffset, viewWidth/2+fullRectOffset,starttextPaintGauge)
+        canvas?.drawText(labelEnd,viewWidth-fullRectOffset, viewWidth/2+fullRectOffset,endtextPaintGauge)
         canvas?.drawText(labelCenter,viewWidth/2f, viewWidth/2f - fullRectOffset*0.5f,textPaintCenter)
         canvas?.drawText(labelCenterDesc,viewWidth/2f, viewWidth/2f +fullRectOffset/2f ,textPaintCenterDesc)
         var radius = (viewWidth-2*fullRectOffset)/2
         var thumbx = (radius * Math.cos(Math.toRadians(progressSweep.toDouble())))
         var thumby = (radius * Math.sin(Math.toRadians(progressSweep.toDouble())))
-        canvas?.save()
-        canvas?.translate(viewWidth/2 - thumbx.toFloat(), viewWidth/2 - thumby.toFloat())
-        mThumb?.draw(canvas!!)
-        canvas?.restore()
+        if(isThumbVisible){
+            canvas?.save()
+            canvas?.translate(viewWidth/2 - thumbx.toFloat(), viewWidth/2 - thumby.toFloat())
+            mThumb?.draw(canvas!!)
+            canvas?.restore()
+        }
+
 
 
     }
-    private fun trial3(canvas :Canvas?){
+   /* private fun trial3(canvas :Canvas?){
         //canvas?.drawColor(Color.WHITE)
         //var offset = 16f
         //var arcoffset = 100f
@@ -328,8 +373,8 @@ class CustomView @JvmOverloads constructor(
 
         canvas?.drawArc(mArcFullRect,180f,180f,false,mArcPaintTrack)
         canvas?.drawArc(mArcFullRect,180f,progressSweep,false,mArcPaint)
-        canvas?.drawText(labelStart,0+fullRectOffset, viewWidth/2+fullRectOffset,textPaintGauge)
-        canvas?.drawText(labelEnd,viewWidth-fullRectOffset, viewWidth/2+fullRectOffset,textPaintGauge)
+        canvas?.drawText(labelStart,0+fullRectOffset, viewWidth/2+fullRectOffset,starttextPaintGauge)
+        canvas?.drawText(labelEnd,viewWidth-fullRectOffset, viewWidth/2+fullRectOffset,endtextPaintGauge)
         canvas?.drawText(labelCenter,viewWidth/2f, viewWidth/2f - fullRectOffset*0.5f,textPaintCenter)
         canvas?.drawText(labelCenterDesc,viewWidth/2f, viewWidth/2f +fullRectOffset/2f ,textPaintCenterDesc)
         var radius = (viewWidth-2*fullRectOffset)/2
@@ -341,7 +386,7 @@ class CustomView @JvmOverloads constructor(
         canvas?.restore()
 
 
-    }
+    }*/
    /* private fun trial2(canvas :Canvas?){
         canvas?.drawColor(Color.WHITE)
         var offset = 16f

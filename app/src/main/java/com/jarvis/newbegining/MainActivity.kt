@@ -12,11 +12,13 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.chip.ChipGroup
 import kotlin.math.roundToInt
 
@@ -35,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         val trackThicknessControll :SeekBar = findViewById(R.id.track_controll)
         val progressThicknessControll :SeekBar = findViewById(R.id.progres_thick_controll)
         val thumbControll :SeekBar = findViewById(R.id.thumb_controll)
+        val thumbSwitch :Switch = findViewById(R.id.thumb_switch)
+        thumbSwitch.isChecked = true
+        val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.toggleButton)
+        val toggleButton2: MaterialButtonToggleGroup = findViewById(R.id.toggleButton2)
 
 
         //rollButton.setFlex()
@@ -115,6 +121,43 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+        thumbSwitch.setOnCheckedChangeListener{bittonView,isChecked ->
+            if(isChecked){
+                customView.isThumbVisible(true)
+            }else{
+                customView.isThumbVisible(false)
+            }
+        }
+
+        toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when(checkedId){
+                R.id.btn1 -> customView.setProgressThumbDrawable(resources.getDrawable(R.drawable.ic_run_circle,theme))
+                R.id.btn2 -> customView.setProgressThumbDrawable(resources.getDrawable(R.drawable.ic_star,theme))
+                R.id.btn3 -> customView.setProgressThumbDrawable(resources.getDrawable(R.drawable.ic_trial,theme))
+            }
+        }
+        toggleButton2.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when(checkedId){
+                R.id.btn12 -> {
+                    customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_15))
+                    customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_15))
+                    customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
+                }
+                R.id.btn22 -> {
+                    customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_20))
+                    customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_20))
+                    customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_60))
+                }
+                R.id.btn32 -> {
+                    customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
+                    customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
+                    customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_90))
+                }
+            }
+        }
+
+
         /*customView.setLabelStart("$20")
         customView.setLabelEnd("$200")
         customView.setLabelCenter("$250")

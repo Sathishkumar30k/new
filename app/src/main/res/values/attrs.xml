@@ -24,6 +24,8 @@
         <attr name="label_center_textSize" format="dimension"/>
         <attr name="label_center_desc_textSize" format="dimension"/>
         <attr name="progressThumbSize" format="dimension"/>
+        <attr name="isThumbVisible" format="boolean"/>
+        <attr name="progressThumbDrawable" format="reference"/>
     </declare-styleable>
 
 </resources>

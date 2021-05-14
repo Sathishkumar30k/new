@@ -17,9 +17,178 @@
         app:label_end="$100"
         app:label_center="$0.00"
         app:label_center_desc="Left to spend"
+        app:label_start_textSize="20dp"
+        app:label_center_textSize="30dp"
         app:progress="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="5dp"
+        android:elevation="5dp"
+        app:cardBackgroundColor="#FBFBFB"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Setings"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20sp"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/roll_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Animate"
+                        android:gravity="center"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Progress Controll"
+                        android:textSize="18sp"/>
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/progress_controll"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Track thickness Controll"
+                        android:textSize="18sp"/>
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/track_controll"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Progres thickness Controll"
+                        android:textSize="18sp"/>
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/progres_thick_controll"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thumb size Controll"
+                        android:textSize="18sp"/>
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/thumb_controll"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thumb Visibility"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"/>
+                        <Switch
+                            android:id="@+id/thumb_switch"
+                            android:layout_marginStart="200dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            />
+
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="select thumb drawable"
+                        android:textSize="18sp"/>
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:layout_width="wrap_content"
+                        android:id="@+id/toggleButton"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:singleSelection="true">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:icon="@drawable/ic_run_circle"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:icon="@drawable/ic_star"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:icon="@drawable/ic_trial"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"/>
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="select Text Size"
+                        android:textSize="18sp"/>
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:layout_width="wrap_content"
+                        android:id="@+id/toggleButton2"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:singleSelection="true">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="small"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="medium"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn32"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="large"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <!--<TextView
         android:id="@+id/wish_textView"
@@ -94,64 +263,6 @@
         app:layout_constraintStart_toStartOf="@id/result_textView2"
         app:layout_constraintTop_toBottomOf="@+id/result_textView1" />-->
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/roll_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Animate"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Progress Controll"
-                android:textSize="18sp"/>
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/progress_controll"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Track thickness Controll"
-                android:textSize="18sp"/>
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/track_controll"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Progres thickness Controll"
-                android:textSize="18sp"/>
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/progres_thick_controll"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Thumb size Controll"
-                android:textSize="18sp"/>
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/thumb_controll"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
-        </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>
