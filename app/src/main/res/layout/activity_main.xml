@@ -13,11 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:label_start="$0"
-        app:label_end="$100"
+        app:label_start="$9999999999"
+        app:label_end="$999999999999"
         app:label_center="$0.00"
         app:label_center_desc="Left to spend"
-        app:progress="20"
+        app:progress="50"
+        app:progressColor ="@color/teal_200"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_gravity="center"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -187,6 +188,39 @@
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn32"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="large"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="select data range"
+                        android:textSize="18sp"/>
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:layout_width="wrap_content"
+                        android:id="@+id/toggleButton3"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:singleSelection="true">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="small"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="medium"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn33"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="large"

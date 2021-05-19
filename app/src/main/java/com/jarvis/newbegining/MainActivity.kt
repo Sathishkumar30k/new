@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         thumbSwitch.isChecked = true
         val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.toggleButton)
         val toggleButton2: MaterialButtonToggleGroup = findViewById(R.id.toggleButton2)
+        val toggleButton3: MaterialButtonToggleGroup = findViewById(R.id.toggleButton3)
 
 
         //rollButton.setFlex()
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
            // rollDice()
             //customView.swapColor()
             customView.setLabelCenter("$"+80+".00")
+           // customView.setProgressColor(resources.getColor(R.color.design_default_color_error,theme))
             //customView.progressAnimation(80,800).start()
             val myanim = customView.progressAnimation(80,800)
             myanim.setDuration(1000)
@@ -155,6 +157,24 @@ class MainActivity : AppCompatActivity() {
                     customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
                     customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
                     customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_90))
+                }
+            }
+        }
+        toggleButton3.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when(checkedId){
+                R.id.btn13 -> {
+                    customView.setLabelStart("$10.0")
+                    customView.setLabelEnd("$110.0")
+                }
+                R.id.btn23 -> {
+                    customView.setLabelStart("$1234")
+                    customView.setLabelEnd("$5678")
+
+                }
+                R.id.btn33 -> {
+                    customView.setLabelStart("$260646026")
+                    customView.setLabelEnd("$98923162026")
+
                 }
             }
         }

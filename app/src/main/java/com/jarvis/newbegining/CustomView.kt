@@ -39,7 +39,7 @@ class CustomView @JvmOverloads constructor(
     private var labelEnd :String
     private var labelCenter :String
     private var labelCenterDesc :String
-    private var progress :Int
+   // private var progress :Int
     private var progressSweep :Float = 0f
     private var progressColor :Int
     private var progressTrackColor :Int
@@ -56,6 +56,8 @@ class CustomView @JvmOverloads constructor(
     private var mRect :RectF
     private var mArcRect :RectF
     private var mArcFullRect :RectF
+    private var labelStartBounds :Rect
+    private var labelEndBounds :Rect
 
     private var mPaint :Paint
     private var mCirclePaint :Paint
@@ -68,7 +70,9 @@ class CustomView @JvmOverloads constructor(
     private var textPaintCenter :Paint
     private var textPaintCenterDesc :Paint
     private var viewWidth: Int =120
+    private var arcviewWidth: Int =120
     private var viewHeight: Int =75
+    private var arcviewHeight: Int =75
 
     init {
         minimumHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,MINIMUM_HEIGHT,resources.displayMetrics).toInt()
@@ -78,7 +82,7 @@ class CustomView @JvmOverloads constructor(
         labelEnd =a.getString(R.styleable.CustomProgressView_label_end) ?: "$0"
         labelCenter =a.getString(R.styleable.CustomProgressView_label_center) ?: "$0"
         labelCenterDesc =a.getString(R.styleable.CustomProgressView_label_center_desc) ?: "Text"
-        progress = a.getInt(R.styleable.CustomProgressView_progress,0)
+        progressSweep = a.getInt(R.styleable.CustomProgressView_progress,0).toFloat()
         progressColor = a.getColor(R.styleable.CustomProgressView_progressColor,Color.parseColor("#002D72"))
         progressTrackColor = a.getColor(R.styleable.CustomProgressView_progressTrackColor,Color.parseColor("#F1F1F1"))
         progressArcThickness = a.getDimension(R.styleable.CustomProgressView_progressArcThickness,60F)
@@ -97,6 +101,8 @@ class CustomView @JvmOverloads constructor(
         mRect =RectF()
         mArcRect =RectF()
         mArcFullRect =RectF()
+        labelStartBounds = Rect()
+        labelEndBounds = Rect()
 
         mPaint= Paint()
         mCirclePaint= Paint()
@@ -105,7 +111,7 @@ class CustomView @JvmOverloads constructor(
         mArcPaintBG= Paint()
         mArcFullRectPaint = Paint()
 
-        mPaint.color = Color.BLUE
+        //mPaint.color = Color.BLUE
         mCirclePaint.color= Color.GREEN
 
         mArcPaint.color= progressColor
@@ -184,7 +190,7 @@ class CustomView @JvmOverloads constructor(
         progressSweep = convertPercentageToSweepAngle(value)
         postInvalidate()
     }
-    fun setProgressColor(value: Int){
+    fun setProgressColor (value: Int){
         mArcPaint.color= value
         postInvalidate()
     }
@@ -298,11 +304,15 @@ class CustomView @JvmOverloads constructor(
 
         viewWidth =width
         viewHeight =height
+
+        arcviewWidth = viewWidth
+        arcviewHeight = viewHeight
         //SQUARE_SIZE= minOf(viewWidth,viewHeight).toFloat()
         //mRect.set(viewWidth/2 - SQUARE_SIZE/2 +offset,viewHeight/2 - SQUARE_SIZE/2 +offset,(viewWidth/2 +SQUARE_SIZE/2 - offset).toFloat(),(viewHeight/2 +SQUARE_SIZE/2 -offset).toFloat())
         //mArcRect.set(viewWidth/2 - SQUARE_SIZE/2 +offset,viewHeight/2 - arcoffset,(viewWidth/2 +SQUARE_SIZE/2 - offset).toFloat(),(viewHeight/2 +SQUARE_SIZE -offset).toFloat())
         var fullRectOffset = viewWidth*FULL_RECT_OFFSSET_MULTIPLIER
         mArcFullRect.set(0f+fullRectOffset,0f+fullRectOffset,(viewWidth - fullRectOffset).toFloat(),(viewWidth - fullRectOffset).toFloat())
+        mArcRect.set(0f+fullRectOffset,0f+fullRectOffset,(arcviewWidth - fullRectOffset).toFloat(),(arcviewWidth - fullRectOffset).toFloat())
         //var fullViewRect = RectF()
 
        // mArcPaint.strokeWidth=  viewWidth*0.05f
@@ -332,12 +342,25 @@ class CustomView @JvmOverloads constructor(
         //canvas?.drawArc(mArcRect,180f,135f,false,mArcPaint)
         mThumb?.setBounds(-progressThumbSize.toInt(),-progressThumbSize.toInt(),progressThumbSize.toInt(),progressThumbSize.toInt())
         progressThumbSizeRatio = progressThumbSize/viewWidth
-        canvas?.drawArc(mArcFullRect,180f,180f,false,mArcPaintTrack)
-        canvas?.drawArc(mArcFullRect,180f,progressSweep,false,mArcPaint)
-        canvas?.drawText(labelStart,0+fullRectOffset, viewWidth/2+fullRectOffset,starttextPaintGauge)
-        canvas?.drawText(labelEnd,viewWidth-fullRectOffset, viewWidth/2+fullRectOffset,endtextPaintGauge)
+        //canvas?.drawRect(mArcFullRect,mPaint)
+
+        starttextPaintGauge.getTextBounds(labelStart,0, labelStart.length,labelStartBounds)
+        endtextPaintGauge.getTextBounds(labelEnd,0, labelEnd.length,labelEndBounds)
+        var startAdj = 0f
+        var endAdj = 0f
+        if(labelStartBounds.width() > 175){
+            startAdj = labelStartBounds.width()-fullRectOffset
+        }
+        if(labelEndBounds.width() > 175){
+            endAdj = labelEndBounds.width()-fullRectOffset
+        }
+        mArcRect.set(0f+fullRectOffset,0f+fullRectOffset,(arcviewWidth - fullRectOffset).toFloat(),(arcviewWidth - fullRectOffset).toFloat())
+        canvas?.drawText(labelStart,0+fullRectOffset+startAdj/2, viewWidth/2+fullRectOffset,starttextPaintGauge)
+        canvas?.drawText(labelEnd,viewWidth-fullRectOffset-endAdj/2, viewWidth/2+fullRectOffset,endtextPaintGauge)
         canvas?.drawText(labelCenter,viewWidth/2f, viewWidth/2f - fullRectOffset*0.5f,textPaintCenter)
-        canvas?.drawText(labelCenterDesc,viewWidth/2f, viewWidth/2f +fullRectOffset/2f ,textPaintCenterDesc)
+        canvas?.drawText("${labelStartBounds.width()}",viewWidth/2f, viewWidth/2f +fullRectOffset/2f ,textPaintCenterDesc)
+        canvas?.drawArc(mArcRect,180f,180f,false,mArcPaintTrack)
+        canvas?.drawArc(mArcRect,180f,progressSweep,false,mArcPaint)
         var radius = (viewWidth-2*fullRectOffset)/2
         var thumbx = (radius * Math.cos(Math.toRadians(progressSweep.toDouble())))
         var thumby = (radius * Math.sin(Math.toRadians(progressSweep.toDouble())))
@@ -347,6 +370,7 @@ class CustomView @JvmOverloads constructor(
             mThumb?.draw(canvas!!)
             canvas?.restore()
         }
+
 
 
 

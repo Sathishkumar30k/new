@@ -11,6 +11,7 @@ class CustomButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : androidx.appcompat.widget.AppCompatButton(context, attrs, defStyleAttr) {
 
+
     init {
         var a :TypedArray = context.obtainStyledAttributes(attrs,R.styleable.CustomButton)
         var type =a.getInt(R.styleable.CustomButton_customType,2)
