@@ -167,13 +167,13 @@ class MainActivity : AppCompatActivity() {
                     customView.setLabelEnd("$110.0")
                 }
                 R.id.btn23 -> {
-                    customView.setLabelStart("$1234")
-                    customView.setLabelEnd("$5678")
+                    customView.setLabelStart("$1234.00")
+                    customView.setLabelEnd("$5678.00")
 
                 }
                 R.id.btn33 -> {
-                    customView.setLabelStart("$260646026")
-                    customView.setLabelEnd("$98923162026")
+                    customView.setLabelStart("$50,000.00")
+                    customView.setLabelEnd("$80,000.00")
 
                 }
             }
