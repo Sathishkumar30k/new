@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-        customView.setLabelStart("$0")
-        customView.setLabelEnd("$100")
+        //customView.setLabelStart("$0")
+        //customView.setLabelEnd("$100")
         /*progressControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 customView.setProgress(progress)
@@ -154,19 +154,19 @@ class MainActivity : AppCompatActivity() {
         toggleButton2.addOnButtonCheckedListener { group, checkedId, isChecked ->
             when(checkedId){
                 R.id.btn12 -> {
-                    customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_15))
-                    customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_15))
-                    customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
+                    customView.setLabelStartTextSize(R.dimen.dimen_15)
+                    customView.setLabelEndTextSize(R.dimen.dimen_15)
+                    customView.setLabelCenterTextSize(R.dimen.dimen_30)
                 }
                 R.id.btn22 -> {
-                    customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_20))
-                    customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_20))
-                    customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_60))
+                    customView.setLabelStartTextSize(R.dimen.dimen_20)
+                    customView.setLabelEndTextSize(R.dimen.dimen_20)
+                    customView.setLabelCenterTextSize(R.dimen.dimen_60)
                 }
                 R.id.btn32 -> {
-                    customView.setLabelStartTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
-                    customView.setLabelEndTextSize(resources.getDimensionPixelSize(R.dimen.dimen_30))
-                    customView.setLabelCenterTextSize(resources.getDimensionPixelSize(R.dimen.dimen_90))
+                    customView.setLabelStartTextSize(R.dimen.dimen_30)
+                    customView.setLabelEndTextSize(R.dimen.dimen_30)
+                    customView.setLabelCenterTextSize(R.dimen.dimen_90)
                 }
             }
         }

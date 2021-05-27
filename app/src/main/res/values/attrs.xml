@@ -26,6 +26,8 @@
         <attr name="progressThumbSize" format="dimension"/>
         <attr name="isThumbVisible" format="boolean"/>
         <attr name="progressThumbDrawable" format="reference"/>
+        <attr name="label_bottom_offset" format="dimension"/>
+
     </declare-styleable>
 
 </resources>
