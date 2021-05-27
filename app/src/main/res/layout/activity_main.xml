@@ -10,14 +10,16 @@
 
     <com.jarvis.newbegining.CustomView
         android:id="@+id/customView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:label_start="$50,000"
+        app:label_start="$50,0000000"
         app:label_end="$80,000"
         app:label_center="$99,999.00"
         app:label_center_desc="Left to spend"
-        app:progress="50"
+        app:progress="10"
+        app:label_start_textSize="20dp"
+        app:label_end_textSize="20dp"
         app:progressColor ="@color/teal_200"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_gravity="center"
@@ -64,18 +66,20 @@
                         android:id="@+id/gaugeView_controll"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:valueFrom="120"
+                        android:valueFrom="200"
                         android:valueTo="380"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Progress Controll"
                         android:textSize="18sp"/>
-                    <androidx.appcompat.widget.AppCompatSeekBar
+                    <com.google.android.material.slider.Slider
                         android:id="@+id/progress_controll"
                         android:layout_marginTop="8dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:valueFrom="0.00"
+                        android:valueTo="100.00"/>
                     <TextView
                         android:layout_marginTop="20dp"
                         android:layout_width="match_parent"

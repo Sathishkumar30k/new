@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -34,7 +35,8 @@ class MainActivity : AppCompatActivity() {
 //        val myText : TextView = findViewById(R.id.sign_textView)
         /*val cg : ChipGroup = findViewById(R.id.chip_group)
         val hs : HorizontalScrollView = findViewById(R.id.h_scroll)*/
-        val progressControll :SeekBar = findViewById(R.id.progress_controll)
+        //val progressControll :SeekBar = findViewById(R.id.progress_controll)
+        val progressControll :Slider = findViewById(R.id.progress_controll)
         val trackThicknessControll :SeekBar = findViewById(R.id.track_controll)
         val progressThicknessControll :SeekBar = findViewById(R.id.progres_thick_controll)
         val thumbControll :SeekBar = findViewById(R.id.thumb_controll)
@@ -50,12 +52,16 @@ class MainActivity : AppCompatActivity() {
         rollButton.setOnClickListener{
            // rollDice()
             //customView.swapColor()
-            customView.setLabelCenter("$"+80+".00")
            // customView.setProgressColor(resources.getColor(R.color.design_default_color_error,theme))
             //customView.progressAnimation(80,800).start()
-            val myanim = customView.progressAnimation(80,800)
-            myanim.setDuration(1000)
+            val myanim = customView.progressAnimation(80f,2000)
+            //myanim.setDuration(1000)
             myanim.start()
+            myanim.addUpdateListener {
+
+                customView.setLabelCenter("$${"%.2f".format(it.animatedValue)}")
+
+            }
             /*val anim = ObjectAnimator.ofInt(customView, "progress", 80)
             anim.setDuration(800)
             anim.interpolator = AccelerateDecelerateInterpolator()
@@ -65,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
         customView.setLabelStart("$0")
         customView.setLabelEnd("$100")
-        progressControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
+        /*progressControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 customView.setProgress(progress)
                 customView.setLabelCenter("$"+progress+".00")
@@ -79,7 +85,11 @@ class MainActivity : AppCompatActivity() {
                 //TODO("Not yet implemented")
             }
 
-        })
+        })*/
+        progressControll.addOnChangeListener { slider, value, fromUser ->
+            customView.setProgress(value.toInt())
+            customView.setLabelCenter("$ ${"%.2f".format(value)}")
+            }
 
         progressThicknessControll.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
