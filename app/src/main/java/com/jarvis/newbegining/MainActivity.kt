@@ -1,6 +1,7 @@
 package com.jarvis.newbegining
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +26,7 @@ import com.google.android.material.slider.Slider
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -156,17 +158,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.btn12 -> {
                     customView.setLabelStartTextSize(R.dimen.dimen_15)
                     customView.setLabelEndTextSize(R.dimen.dimen_15)
-                    customView.setLabelCenterTextSize(R.dimen.dimen_30)
                 }
                 R.id.btn22 -> {
                     customView.setLabelStartTextSize(R.dimen.dimen_20)
                     customView.setLabelEndTextSize(R.dimen.dimen_20)
-                    customView.setLabelCenterTextSize(R.dimen.dimen_60)
                 }
                 R.id.btn32 -> {
                     customView.setLabelStartTextSize(R.dimen.dimen_30)
                     customView.setLabelEndTextSize(R.dimen.dimen_30)
-                    customView.setLabelCenterTextSize(R.dimen.dimen_90)
                 }
             }
         }

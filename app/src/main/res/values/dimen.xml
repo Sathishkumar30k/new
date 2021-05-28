@@ -4,10 +4,12 @@
     <dimen name="dimen_6">6dp</dimen>
     <dimen name="dimen_8">8dp</dimen>
     <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_12">12dp</dimen>
     <dimen name="dimen_14">14dp</dimen>
     <dimen name="dimen_15">15dp</dimen>
     <dimen name="dimen_12sp">12sp</dimen>
     <dimen name="dimen_18sp">18sp</dimen>
+    <dimen name="dimen_18">18dp</dimen>
     <dimen name="dimen_20">20dp</dimen>
     <dimen name="dimen_26">26dp</dimen>
     <dimen name="dimen_24sp">24sp</dimen>

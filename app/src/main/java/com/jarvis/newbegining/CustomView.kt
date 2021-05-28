@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.graphics.text.LineBreaker
+import android.os.Build
 import android.text.*
 import android.util.AttributeSet
 import android.util.Log
@@ -14,8 +16,11 @@ import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.DimenRes
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.withTranslation
 
+ @RequiresApi(Build.VERSION_CODES.P)
  class CustomView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.myViewStyle
 ) : View(context, attrs, defStyleAttr) {
@@ -78,125 +83,154 @@ import androidx.core.content.ContextCompat
     private var mArcPaintTrack :Paint
     private var mArcPaintBG :Paint
     private var mArcFullRectPaint :Paint
-    private var starttextPaintGauge :Paint
-    private var endtextPaintGauge :Paint
+    private var starttextPaintGauge :TextPaint
+    private var endtextPaintGauge :TextPaint
     private var textPaintCenter :TextPaint
-    private var textPaintCenterDesc :Paint
+    private var textPaintCenterDesc :TextPaint
     private var viewWidth: Int =120
     private var arcviewWidth: Int =120
     private var viewHeight: Int =75
     private var arcviewHeight: Int =75
+    private lateinit var startLayout: DynamicLayout
+    private lateinit var endLayout: DynamicLayout
+    private lateinit var centerLayout: DynamicLayout
+    private lateinit var centerDescLayout: DynamicLayout
+
 
     init {
-        val default_padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,16f,resources.displayMetrics).toInt()
-        //setPadding(default_padding,default_padding,default_padding,default_padding)
-        minimumHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,MINIMUM_HEIGHT,resources.displayMetrics).toInt()
-        minimumWidth=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,MINIMUM_WIDTH,resources.displayMetrics).toInt()
         var a : TypedArray = context.obtainStyledAttributes(attrs,R.styleable.CustomProgressView)
-        labelStart =a.getString(R.styleable.CustomProgressView_label_start) ?: "$0.0"
-        labelEnd =a.getString(R.styleable.CustomProgressView_label_end) ?: "$0.0"
-        labelCenter =a.getString(R.styleable.CustomProgressView_label_center) ?: "$0.0"
-        labelCenterDesc =a.getString(R.styleable.CustomProgressView_label_center_desc) ?: "Text"
-        progressSweep = convertPercentageToSweepAngle(a.getInt(R.styleable.CustomProgressView_progress,0))
-        progressColor = a.getColor(R.styleable.CustomProgressView_progressColor,Color.parseColor("#002D72"))
-        progressTrackColor = a.getColor(R.styleable.CustomProgressView_progressTrackColor,Color.parseColor("#F1F1F1"))
-        progressArcThickness = a.getDimension(R.styleable.CustomProgressView_progressArcThickness,resources.getDimension(R.dimen.dimen_6))
-        progressTrackThickness = a.getDimension(R.styleable.CustomProgressView_progressTrackThickness,resources.getDimension(R.dimen.dimen_6))
-        bottomLabelOffset = a.getDimension(R.styleable.CustomProgressView_label_bottom_offset,resources.getDimension(R.dimen.dimen_8))
-        progressThumbSize= a.getDimension(R.styleable.CustomProgressView_progressThumbSize,resources.getDimension(R.dimen.dimen_14))
-        labelStartTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_start_textSize,resources.getDimension(R.dimen.dimen_18sp).toInt())
-        labelEndTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_end_textSize,resources.getDimension(R.dimen.dimen_18sp).toInt())
-        labelCenterTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_center_textSize,resources.getDimension(R.dimen.dimen_24sp).toInt())
-        labelCenterDescTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_center_desc_textSize,resources.getDimension(R.dimen.dimen_12sp).toInt())
-        isThumbVisible = a.getBoolean(R.styleable.CustomProgressView_isThumbVisible,true)
-        centerLabelOffset=resources.getDimension(R.dimen.dimen_10)
-        centerLabelDescOffset=resources.getDimension(R.dimen.dimen_8)
-        mThumb = a.getDrawable(R.styleable.CustomProgressView_progressThumbDrawable)?:ContextCompat.getDrawable(context,R.drawable.ic_run_circle)
-        var thumbHalfH =mThumb?.intrinsicHeight
-        var thumbHalfW =mThumb?.intrinsicHeight
-        mThumb?.setBounds(-thumbHalfW!!,-thumbHalfH!!,thumbHalfW,thumbHalfH)
+        try {
+            val default_padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,16f,resources.displayMetrics).toInt()
+            //setPadding(default_padding,default_padding,default_padding,default_padding)
+            minimumHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,MINIMUM_HEIGHT,resources.displayMetrics).toInt()
+            minimumWidth=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,MINIMUM_WIDTH,resources.displayMetrics).toInt()
 
-        mRect =RectF()
-        mArcRect =RectF()
-        mArcFullRect =RectF()
-        labelStartBounds = Rect()
-        labelEndBounds = Rect()
+            labelStart =a.getString(R.styleable.CustomProgressView_label_start) ?: "$0.0"
+            labelEnd =a.getString(R.styleable.CustomProgressView_label_end) ?: "$0.0"
+            labelCenter =a.getString(R.styleable.CustomProgressView_label_center) ?: "$0.0"
+            labelCenterDesc =a.getString(R.styleable.CustomProgressView_label_center_desc) ?: "Text"
+            progressSweep = convertPercentageToSweepAngle(a.getInt(R.styleable.CustomProgressView_progress,0))
+            progressColor = a.getColor(R.styleable.CustomProgressView_progressColor,Color.parseColor("#002D72"))
+            progressTrackColor = a.getColor(R.styleable.CustomProgressView_progressTrackColor,Color.parseColor("#F1F1F1"))
+            progressArcThickness = a.getDimension(R.styleable.CustomProgressView_progressArcThickness,resources.getDimension(R.dimen.dimen_6))
+            progressTrackThickness = a.getDimension(R.styleable.CustomProgressView_progressTrackThickness,resources.getDimension(R.dimen.dimen_6))
+            bottomLabelOffset = a.getDimension(R.styleable.CustomProgressView_label_bottom_offset,resources.getDimension(R.dimen.dimen_10))
+            progressThumbSize= a.getDimension(R.styleable.CustomProgressView_progressThumbSize,resources.getDimension(R.dimen.dimen_14))
+            labelStartTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_start_textSize,resources.getDimension(R.dimen.dimen_18sp).toInt())
+            labelEndTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_end_textSize,resources.getDimension(R.dimen.dimen_18sp).toInt())
+            labelCenterTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_center_textSize,resources.getDimension(R.dimen.dimen_24sp).toInt())
+            labelCenterDescTextSize = a.getDimensionPixelSize(R.styleable.CustomProgressView_label_center_desc_textSize,resources.getDimension(R.dimen.dimen_12sp).toInt())
+            isThumbVisible = a.getBoolean(R.styleable.CustomProgressView_isThumbVisible,true)
+            centerLabelOffset=resources.getDimension(R.dimen.dimen_18)
+            centerLabelDescOffset=resources.getDimension(R.dimen.dimen_8)
+            mThumb = a.getDrawable(R.styleable.CustomProgressView_progressThumbDrawable)?:ContextCompat.getDrawable(context,R.drawable.ic_run_circle)
+            var thumbHalfH =mThumb?.intrinsicHeight
+            var thumbHalfW =mThumb?.intrinsicHeight
+            mThumb?.setBounds(-thumbHalfW!!,-thumbHalfH!!,thumbHalfW,thumbHalfH)
 
-        mPaint= Paint()
-        mCirclePaint= Paint()
-        mArcPaint= Paint()
-        mArcPaintTrack= Paint()
-        mArcPaintBG= Paint()
-        mArcFullRectPaint = Paint()
+            mRect =RectF()
+            mArcRect =RectF()
+            mArcFullRect =RectF()
+            labelStartBounds = Rect()
+            labelEndBounds = Rect()
 
-        //mPaint.color = Color.BLUE
-        mCirclePaint.color= Color.GREEN
+            mPaint= Paint()
+            mCirclePaint= Paint()
+            mArcPaint= Paint()
+            mArcPaintTrack= Paint()
+            mArcPaintBG= Paint()
+            mArcFullRectPaint = Paint()
 
-        mArcPaint.color= progressColor
-        mArcPaint.style=Paint.Style.STROKE
-        mArcPaint.strokeCap= Paint.Cap.ROUND
-        mArcPaint.strokeWidth= progressArcThickness
-        mArcPaint.isAntiAlias =true
-        //mArcPaint.shader = LinearGradient(0f,0f,0f,height.toFloat(),Color.parseColor("#002D72"),Color.parseColor("#00BBF2"),Shader.TileMode.MIRROR)
+            //mPaint.color = Color.BLUE
+            mCirclePaint.color= Color.GREEN
+
+            mArcPaint.color= progressColor
+            mArcPaint.style=Paint.Style.STROKE
+            mArcPaint.strokeCap= Paint.Cap.ROUND
+            mArcPaint.strokeWidth= progressArcThickness
+            mArcPaint.isAntiAlias =true
+            //mArcPaint.shader = LinearGradient(0f,0f,0f,height.toFloat(),Color.parseColor("#002D72"),Color.parseColor("#00BBF2"),Shader.TileMode.MIRROR)
 
 
-        mArcPaintBG.color= Color.RED
+            mArcPaintBG.color= Color.RED
 
-        mArcPaintTrack.color= progressTrackColor
-        mArcPaintTrack.style = Paint.Style.STROKE
-        mArcPaintTrack.strokeCap = Paint.Cap.ROUND
-        mArcPaintTrack.strokeWidth = progressTrackThickness
-        mArcPaintTrack.isAntiAlias =true
+            mArcPaintTrack.color= progressTrackColor
+            mArcPaintTrack.style = Paint.Style.STROKE
+            mArcPaintTrack.strokeCap = Paint.Cap.ROUND
+            mArcPaintTrack.strokeWidth = progressTrackThickness
+            mArcPaintTrack.isAntiAlias =true
 
-        mArcFullRectPaint.color = Color.YELLOW
+            mArcFullRectPaint.color = Color.YELLOW
 
-        starttextPaintGauge = Paint().apply {
-            isAntiAlias =true
-            textAlign = Paint.Align.LEFT
-            color = Color.parseColor("#666666")
-            textSize = resources.getDimension(R.dimen.dimen_18sp)
+            starttextPaintGauge = TextPaint().apply {
+                isAntiAlias =true
+                textAlign = Paint.Align.LEFT
+                color = Color.parseColor("#666666")
+                textSize = labelStartTextSize.toFloat()
+            }
+            endtextPaintGauge = TextPaint().apply {
+                isAntiAlias =true
+                textAlign = Paint.Align.RIGHT
+                color = Color.parseColor("#666666")
+                textSize = labelEndTextSize.toFloat()
+            }
+            textPaintCenterDesc = TextPaint().apply {
+                isAntiAlias =true
+                textAlign = Paint.Align.CENTER
+                color = Color.parseColor("#666666")
+                textSize = labelCenterDescTextSize.toFloat()
+            }
+            textPaintCenter = TextPaint().apply {
+                isAntiAlias =true
+                textAlign = Paint.Align.CENTER
+                color = Color.BLACK
+                textSize = labelCenterTextSize.toFloat()
+            }
+
+            starttextPaintGauge.getTextBounds(labelStart,0, labelStart.length,labelStartBounds)
+            endtextPaintGauge.getTextBounds(labelEnd,0, labelEnd.length,labelEndBounds)
+
+
+            /* setLabelStart(labelStart)
+             setLabelEnd(labelEnd)
+             setLabelCenter(labelCenter)
+             setLabelCenterDesc(labelCenterDesc)
+             setProgress(progress)
+             setProgressColor(progressColor)
+             setProgressTrackColor(progressTrackColor)*/
+
+            startLayout = DynamicLayout.Builder
+                .obtain(labelStart,starttextPaintGauge,starttextPaintGauge.measureText(labelStart).toInt())
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .build()
+            endLayout =DynamicLayout.Builder
+                .obtain(labelEnd,endtextPaintGauge,endtextPaintGauge.measureText(labelEnd).toInt())
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .build()
+            centerLayout =DynamicLayout.Builder
+                .obtain(labelCenter,textPaintCenter,textPaintCenter.measureText(labelCenter).toInt())
+                .setAlignment(Layout.Alignment.ALIGN_CENTER)
+                .build()
+            centerDescLayout =DynamicLayout.Builder
+                .obtain(labelCenterDesc,textPaintCenterDesc,textPaintCenterDesc.measureText(labelCenterDesc).toInt())
+                .setAlignment(Layout.Alignment.ALIGN_CENTER)
+                .build()
+
+        }finally {
+            a.recycle()
         }
-        endtextPaintGauge = Paint().apply {
-            isAntiAlias =true
-            textAlign = Paint.Align.RIGHT
-            color = Color.parseColor("#666666")
-            textSize = resources.getDimension(R.dimen.dimen_18sp)
-        }
-        textPaintCenterDesc = Paint().apply {
-            isAntiAlias =true
-            textAlign = Paint.Align.CENTER
-            color = Color.parseColor("#666666")
-            textSize = resources.getDimension(R.dimen.dimen_18sp)
-        }
-        textPaintCenter = TextPaint().apply {
-            isAntiAlias =true
-            textAlign = Paint.Align.CENTER
-            color = Color.BLACK
-            textSize = resources.getDimension(R.dimen.dimen_24sp)
-        }
-
-        starttextPaintGauge.getTextBounds(labelStart,0, labelStart.length,labelStartBounds)
-        endtextPaintGauge.getTextBounds(labelEnd,0, labelEnd.length,labelEndBounds)
-
-       /* setLabelStart(labelStart)
-        setLabelEnd(labelEnd)
-        setLabelCenter(labelCenter)
-        setLabelCenterDesc(labelCenterDesc)
-        setProgress(progress)
-        setProgressColor(progressColor)
-        setProgressTrackColor(progressTrackColor)*/
-
-
 
 
     }
 
     fun setLabelStart(value :String) {
         labelStart = value
+        requestLayout()
         postInvalidate()
     }
     fun setLabelEnd(value :String) {
         labelEnd = value
+        requestLayout()
         postInvalidate()
     }
     fun setLabelCenter(value :String) {
@@ -237,18 +271,29 @@ import androidx.core.content.ContextCompat
 
     fun setLabelStartTextSize(@DimenRes value: Int){
         labelStartTextSize= resources.getDimension(value).toInt()
+        //starttextPaintGauge.textSize = labelStartTextSize.toFloat()
+        requestLayout()
         postInvalidate()
     }
+     fun setLabelStartTextSize( value: Float){
+         labelStartTextSize= (value *resources.displayMetrics.density).toInt()
+         //starttextPaintGauge.textSize = value *resources.displayMetrics.density
+         requestLayout()
+         postInvalidate()
+     }
     fun setLabelEndTextSize(@DimenRes value: Int){
         labelEndTextSize= resources.getDimension(value).toInt()
+        requestLayout()
         postInvalidate()
     }
     fun setLabelCenterTextSize(@DimenRes value: Int){
         labelCenterTextSize= resources.getDimension(value).toInt()
+        requestLayout()
         postInvalidate()
     }
     fun setLabelCenterDescTextSize(@DimenRes value: Int){
         labelCenterDescTextSize= resources.getDimension(value).toInt()
+        requestLayout()
         postInvalidate()
     }
 
@@ -308,22 +353,23 @@ import androidx.core.content.ContextCompat
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        //super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        var StartLabelTextHeight = (-starttextPaintGauge.ascent()+starttextPaintGauge.descent()).toInt()
+        var endLabelTextHeight = (-endtextPaintGauge.ascent()+endtextPaintGauge.descent()).toInt()
+        var endLabelTextwidth = endtextPaintGauge.measureText(labelEnd)
+        var StartLabelTextwidth = starttextPaintGauge.measureText(labelStart)
 
         var desiredWidth = suggestedMinimumWidth + paddingLeft +paddingRight
-        if(isTextOverlapping(desiredWidth)){
-            desiredWidth = suggestedMinimumWidth + paddingLeft +paddingRight + maxOf(labelStartBounds.width(),labelEndBounds.width())/2
+        if(endLabelTextwidth+StartLabelTextwidth+viewOffset+paddingStart+paddingEnd >desiredWidth){
+            desiredWidth += (endLabelTextwidth + StartLabelTextwidth + viewOffset+paddingStart+paddingEnd  - desiredWidth).toInt()
         }
-        //var desiredHeight = suggestedMinimumWidth*SCALE_RATIO + paddingTop +paddingBottom + maxOf(labelStartBounds.height(),labelEndBounds.height())
-        var desiredHeight = suggestedMinimumWidth*SCALE_RATIO + paddingTop +paddingBottom + bottomLabelOffset +maxOf(labelStartBounds.height(),labelEndBounds.height())
+        var desiredHeight = (desiredWidth-paddingStart-paddingEnd)*SCALE_RATIO + paddingTop +paddingBottom + bottomLabelOffset +maxOf(StartLabelTextHeight,endLabelTextHeight)
 
         if( MeasureSpec.getMode(heightMeasureSpec) ==MeasureSpec.AT_MOST){
             var calculatedWidth = measureDimension(desiredWidth,widthMeasureSpec)
-            if(isTextOverlapping(calculatedWidth)){
-                calculatedWidth = measureDimension(desiredWidth,widthMeasureSpec)+ maxOf(labelStartBounds.width(),labelEndBounds.width())/2
+            if(endLabelTextwidth+StartLabelTextwidth+viewOffset+paddingStart+paddingEnd  >calculatedWidth){
+                calculatedWidth += (endLabelTextwidth + StartLabelTextwidth + viewOffset+paddingStart+paddingEnd  - calculatedWidth).toInt()
             }
-            //var calculatedHeight = calculatedWidth*SCALE_RATIO+ paddingTop +paddingBottom  + maxOf(labelStartBounds.height(),labelEndBounds.height())
-            var calculatedHeight = measureDimension(suggestedMinimumWidth,widthMeasureSpec) *SCALE_RATIO + paddingTop +paddingBottom +bottomLabelOffset + maxOf(labelStartBounds.height(),labelEndBounds.height())
+            var calculatedHeight = measureDimension((calculatedWidth-paddingStart-paddingEnd),widthMeasureSpec) *SCALE_RATIO + paddingTop +paddingBottom +bottomLabelOffset+maxOf(StartLabelTextHeight,endLabelTextHeight)
 
             setMeasuredDimension(calculatedWidth,calculatedHeight.toInt())
         }else{
@@ -362,6 +408,8 @@ import androidx.core.content.ContextCompat
         //canvas?.drawColor(Color.WHITE)
         //var offset = 16f
         //var arcoffset = 100f
+
+
 
 
         viewWidth =width
@@ -405,7 +453,7 @@ import androidx.core.content.ContextCompat
 
         //canvas?.drawArc(mArcRect,180f,180f,false,mArcPaintTrack)
         //canvas?.drawArc(mArcRect,180f,135f,false,mArcPaint)
-        mThumb?.setBounds(-progressThumbSize.toInt(),-progressThumbSize.toInt(),progressThumbSize.toInt(),progressThumbSize.toInt())
+        mThumb?.setBounds(-progressThumbSize.toInt()/2,-progressThumbSize.toInt()/2,progressThumbSize.toInt()/2,progressThumbSize.toInt()/2)
         //progressThumbSizeRatio = progressThumbSize/viewWidth
         //canvas?.drawRect(mArcRect,mPaint)
         starttextPaintGauge.getTextBounds(labelStart,0, labelStart.length,labelStartBounds)
@@ -420,11 +468,12 @@ import androidx.core.content.ContextCompat
         }*/
         //TEXT_SIZE_FACTOR= maxOf(labelStartBounds.height(),labelEndBounds.height()).toFloat()
         //mArcRect.set(0f+fullRectOffset,0f+fullRectOffset,(arcviewWidth - fullRectOffset).toFloat(),(arcviewWidth - fullRectOffset).toFloat())
-        canvas?.drawText(labelStart,0+viewOffset*0.5f, viewWidth/2f+labelStartBounds.height()+bottomLabelOffset,starttextPaintGauge)
-        canvas?.drawText(labelEnd,viewWidth-viewOffset*0.5f, viewWidth/2f+labelEndBounds.height()+bottomLabelOffset,endtextPaintGauge)
-        canvas?.drawText(labelCenter,viewWidth/2f, viewWidth/2f - centerLabelOffset,textPaintCenter)
+        //canvas?.drawText(labelStart,0+viewOffset*0.5f, viewWidth/2f+labelStartBounds.height()+bottomLabelOffset,starttextPaintGauge)
+        //canvas?.drawText(labelEnd,viewWidth-viewOffset*0.5f, viewWidth/2f+labelEndBounds.height()+bottomLabelOffset,endtextPaintGauge)
+        //canvas?.drawText(labelCenter,viewWidth/2f, viewWidth/4f+viewOffset ,textPaintCenter)
         //canvas?.drawMultilineText(labelCenter,textPaintCenter,labelEndBounds.width(),viewWidth/2f, viewWidth/2f - fullRectOffset*0.5f)
-        canvas?.drawText(labelCenterDesc,viewWidth/2f, viewWidth/2f+centerLabelDescOffset ,textPaintCenterDesc)
+        //canvas?.drawText(labelCenterDesc,viewWidth/2f, viewWidth/2f ,textPaintCenterDesc)
+        canvas?.clipRect(0,0,viewWidth,(viewWidth*SCALE_RATIO+bottomLabelOffset+maxOf(startLayout.height,endLayout.height)).toInt())
         canvas?.drawArc(mArcRect,180f,180f,false,mArcPaintTrack)
         canvas?.drawArc(mArcRect,180f,progressSweep,false,mArcPaint)
         var radius = (viewWidth-2*viewOffset)/2
@@ -437,12 +486,37 @@ import androidx.core.content.ContextCompat
             canvas?.restore()
 
         }
-        measure(width,height)
+        startLayout = DynamicLayout.Builder
+            .obtain(labelStart,starttextPaintGauge,starttextPaintGauge.measureText(labelStart).toInt())
+            .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+            .build()
+        endLayout =DynamicLayout.Builder
+            .obtain(labelEnd,endtextPaintGauge,endtextPaintGauge.measureText(labelEnd).toInt())
+            .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+            .build()
+        centerLayout =DynamicLayout.Builder
+            .obtain(labelCenter,textPaintCenter,textPaintCenter.measureText(labelCenter).toInt())
+            .setAlignment(Layout.Alignment.ALIGN_CENTER)
+            .build()
+        centerDescLayout =DynamicLayout.Builder
+            .obtain(labelCenterDesc,textPaintCenterDesc,textPaintCenterDesc.measureText(labelCenterDesc).toInt())
+            .setAlignment(Layout.Alignment.ALIGN_CENTER)
+            .build()
+            startLayout.draw(canvas!!,0+viewOffset*0.5f, viewWidth/2f+bottomLabelOffset)
+            endLayout.draw(canvas!!,viewWidth-viewOffset*0.5f, viewWidth/2f+bottomLabelOffset)
+            centerLayout.draw(canvas!!,viewWidth/2f, viewWidth/4f+viewOffset-centerLayout.height/2)
+            centerDescLayout.draw(canvas!!,viewWidth/2f, viewWidth/2f-centerDescLayout.height/2 )
+
 
 
 
 
     }
+     fun DynamicLayout.draw(canvas: Canvas,x :Float, y:Float){
+         canvas.withTranslation(x,y){
+             draw(this)
+         }
+     }
 
     /*private fun trial4(canvas :Canvas?){
         //canvas?.drawColor(Color.WHITE)
